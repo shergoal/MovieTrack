@@ -39,12 +39,20 @@ Catch()(ApiExceptionFilter);
 
 try {
   const service = await createMovieTrackService(database, env);
+  const featureModules = createControllers(service.routes).map(controller => {
+    class ResourceModule {}
+    Object.defineProperty(ResourceModule, 'name', {
+      value: controller.name.replace(/Controller$/, 'Module')
+    });
+    Module({ controllers: [controller] })(ResourceModule);
+    return ResourceModule;
+  });
   class MovieTrackModule {
     onApplicationShutdown() {
       return database.close();
     }
   }
-  Module({ controllers: createControllers(service.routes) })(MovieTrackModule);
+  Module({ imports: featureModules })(MovieTrackModule);
   const app = await NestFactory.create(MovieTrackModule, { bodyParser: false, abortOnError: false });
   app.enableShutdownHooks();
   app.setGlobalPrefix('api/v1');
