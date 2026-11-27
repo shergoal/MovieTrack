@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{baseUrl}}/movies"
+method: GET
+headers:
+  Accept: application/json
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("HTTP 401", () => pm.response.to.have.status(401));
+      pm.test("Request ID is returned", () => pm.expect(pm.response.headers.has("X-Request-Id")).to.eql(true));
+      pm.test("Standard error response", () => pm.expect(pm.response.json().statusCode).to.eql(401));
+    language: text/javascript
+order: 3000

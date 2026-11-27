@@ -1,0 +1,24 @@
+$kind: http-request
+url: "{{baseUrl}}/movies/{{movieId}}"
+method: PUT
+headers:
+  Accept: application/json
+  Authorization: Bearer {{token}}
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "title": "Updated Movie",
+      "durationMinutes": 105,
+      "ageRating": "PG",
+      "status": "Showing",
+      "posterPath": null
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("HTTP 200", () => pm.response.to.have.status(200));
+      pm.test("Request ID is returned", () => pm.expect(pm.response.headers.has("X-Request-Id")).to.eql(true));
+    language: text/javascript
+order: 13000

@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{baseUrl}}/genres/{{genreId}}"
+method: PATCH
+headers:
+  Accept: application/json
+  Authorization: Bearer {{token}}
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "genreName": "Updated Genre {{$timestamp}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("HTTP 200", () => pm.response.to.have.status(200));
+      pm.test("Request ID is returned", () => pm.expect(pm.response.headers.has("X-Request-Id")).to.eql(true));
+    language: text/javascript
+order: 19000

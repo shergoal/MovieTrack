@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{baseUrl}}/reports"
+method: POST
+headers:
+  Accept: application/json
+  Authorization: Bearer {{staffToken}}
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "reportName": "Movie List"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("HTTP 201", () => pm.response.to.have.status(201));
+      pm.test("Request ID is returned", () => pm.expect(pm.response.headers.has("X-Request-Id")).to.eql(true));
+      if (pm.response.code === 201) pm.collectionVariables.set("reportId", pm.response.json().reportId);
+    language: text/javascript
+order: 22000

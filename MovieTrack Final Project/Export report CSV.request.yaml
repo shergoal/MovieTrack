@@ -1,0 +1,18 @@
+$kind: http-request
+url: "{{baseUrl}}/reports/{{reportId}}"
+method: GET
+headers:
+  Accept: text/csv
+  Authorization: Bearer {{token}}
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("HTTP 200", () => pm.response.to.have.status(200));
+      pm.test("Request ID is returned", () => pm.expect(pm.response.headers.has("X-Request-Id")).to.eql(true));
+      pm.test("CSV contains MovieTrack Test Movie", () => {pm.expect(pm.response.text()).to.include("MovieTrack Test Movie");});
+    language: text/javascript
+order: 25000

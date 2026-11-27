@@ -1,0 +1,15 @@
+$kind: collection
+description: Run in order against a local MovieTrack database. Set adminEmail, adminPassword, staffEmail, and staffPassword as local Postman environment values. Use a new staff email and a password of at least 12 characters. The suite creates and removes its own demo records.
+variables:
+  baseUrl: http://127.0.0.1:3000/api/v1
+  adminEmail: ""
+  adminPassword: ""
+  staffEmail: ""
+  staffPassword: ""
+  token: ""
+  staffToken: ""
+  userId: ""
+  movieId: ""
+  genreId: ""
+  movieGenreId: ""
+  reportId: ""
